@@ -5,6 +5,7 @@ Edit the ..\libraries\DigisparkMouse\usbconfig.h file to modify the USB identifi
 Update the following two lines with your desired values:
 
 For Vendor ID: #define USB_CFG_VENDOR_ID 0x??, 0x??
+
 For Device ID: #define USB_CFG_DEVICE_ID 0x??, 0x??
 
 To convert the VID (Vendor ID) and PID (Product ID) to Little Endian format, simply swap the byte order:
