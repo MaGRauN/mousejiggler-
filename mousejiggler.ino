@@ -1,27 +1,43 @@
 #include "DigiMouse.h"
 #include <math.h>
 
-#define SPEED 5   // Intervalo de tempo entre cada atualização (ms)
-#define STEP 0.2   // Passo do ângulo (ajusta a suavidade do movimento)
-#define RADIUS 0.6 // Raio máximo dentro do pixel (ajustado para evitar escape)
+#define SPEED 5       // Intervalo de tempo entre atualizações (ms)
+#define STEP 0.2      // Passo do ângulo (ajusta a suavidade do movimento)
+#define RADIUS 0.6    // Raio máximo dentro do pixel
+#define BUTTON_PIN 0  // Botão conectado ao pino P0
+
+bool movimentoAtivo = false;  // Estado do movimento
+bool lastButtonState = HIGH;  // Armazena o último estado do botão
 
 void setup() {
-    DigiMouse.begin(); // Inicializa a biblioteca DigiMouse
+    pinMode(BUTTON_PIN, INPUT_PULLUP);  // Ativa o pull-up interno do Digispark
+    DigiMouse.begin();  // Inicializa o mouse USB (importante!)
 }
 
 void loop() {
-    static float angle = 0; // Ângulo do movimento circular acumulado
+    bool buttonState = digitalRead(BUTTON_PIN); // Lê o estado do botão
 
-    // Calcula deslocamento mantendo o raio abaixo de 1 pixel
-    float dx = RADIUS * cos(angle);
-    float dy = RADIUS * sin(angle);
+    // Se o botão foi pressionado (transição de HIGH para LOW)
+    if (buttonState == LOW && lastButtonState == HIGH) {
+        movimentoAtivo = !movimentoAtivo;  // Alterna o estado
+        delay(200);  // Pequeno atraso para evitar múltiplos acionamentos rápidos
+    }
 
-    // Move apenas quando houver mudança de posição perceptível
-    DigiMouse.move(round(dx), round(dy), 0);
-    DigiMouse.update(); // Atualiza o estado do mouse
+    lastButtonState = buttonState; // Atualiza o estado do botão
 
-    angle += STEP; // Avança o ângulo para o próximo ponto do círculo
-    if (angle >= 2 * M_PI) angle = 0; // Reinicia o ângulo após um ciclo completo
+    if (movimentoAtivo) {
+        static float angle = 0;
+        float dx = RADIUS * cos(angle);
+        float dy = RADIUS * sin(angle);
 
-    delay(SPEED); // Ajuste na suavidade do movimento
+        DigiMouse.move(round(dx), round(dy), 0);
+        DigiMouse.update();
+
+        angle += STEP;
+        if (angle >= 2 * M_PI) angle = 0;
+    } else {
+        DigiMouse.update();  // Precisa ser chamado no loop para evitar desconexões
+    }
+
+    delay(SPEED);
 }
