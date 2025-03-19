@@ -3,14 +3,20 @@
 Create a **Mouse Jiggler** using a **Digispark** device or a similar microcontroller and Arduino IDE.
 
 > 1. On Arduino IDE click on File - Preferences.
-> 1.1. On "Additional Boards Manager URLs", include this address "http://digistump.com/package_digistump_index.json".
-1.2. Click on "OK".
+> 
+>    1.1 On "Additional Boards Manager URLs", include this address "http://digistump.com/package_digistump_index.json".
+> 
+>    1.2. Click on "OK".
+> 
 > 2. Click on Tools - Board:* - Boards Manager...
-> 2.1. Search and install "Digistump AVR Boards".
+> 
+>    2.1. Search and install "Digistump AVR Boards".
+> 
 > 3. Click Click on Tools - Board:*.
->3.1. Select "Digistump AVR Boards" and select "Digispark(Default - 16.5mhz).
+> 
+>    3.1. Click on "Digistump AVR Boards" and select "Digispark(Default - 16.5mhz).
  
-Edit the ..\libraries\DigisparkMouse\usbconfig.h file to modify the USB identifier.
+If you want to customize the USB device identifier displayed in device manager, edit the ..\libraries\DigisparkMouse\usbconfig.h file to modify the USB identifier.
 
 Update the following lines with your desired values:
 
